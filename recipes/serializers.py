@@ -1,5 +1,7 @@
 from rest_framework import serializers
 from .models import Recipe, Comment
+from likes.models import Like
+from rest_framework import serializers
 from profiles.models import Profile
 
 class RecipeSerializer(serializers.ModelSerializer):
@@ -16,7 +18,10 @@ class RecipeSerializer(serializers.ModelSerializer):
 
     def get_is_liked(self, obj):
         user = self.context['request'].user
-        return user in obj.likes.all()
+        if user.is_authenticated:
+            return Like.objects.filter(owner=user, recipe=obj).exists()
+        return False
+
 
 class CommentSerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')

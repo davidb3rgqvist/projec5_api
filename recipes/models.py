@@ -10,16 +10,15 @@ class Recipe(models.Model):
     image = models.ImageField(upload_to='recipes/', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    likes = models.ManyToManyField(User, related_name='liked_recipes', blank=True)
 
     def __str__(self):
         return self.title
 
     @property
     def likes_count(self):
-        return self.likes.count()
-
-
+        return self.likes_set.count() 
+    
+    
 class Comment(models.Model):
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, related_name='comments')
     owner = models.ForeignKey(User, on_delete=models.CASCADE)

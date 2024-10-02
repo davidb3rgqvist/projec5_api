@@ -1,7 +1,8 @@
 from django.contrib.auth.models import User
 from rest_framework import status
-from rest_framework.test import APITestCase
-from .models import Recipe
+from rest_framework.test import APITestCase, APIRequestFactory
+from .models import Recipe, Comment
+from profiles.models import Profile
 
 class RecipeDetailViewTests(APITestCase):
     def setUp(self):
@@ -59,3 +60,33 @@ class RecipeDetailViewTests(APITestCase):
             'steps': 'Should not update'
         })
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+
+class CommentSerializerTests(APITestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(username='testuser', password='password')
+        # Create a test recipe
+        self.recipe = Recipe.objects.create(owner=self.user, title="Test Recipe", short_description="A test recipe")
+
+    def test_comment_serializer_includes_profile(self):
+        # Ensure that a profile was created for the user
+        self.assertEqual(Profile.objects.count(), 1)
+
+        # Create a comment
+        comment = Comment.objects.create(owner=self.user, recipe=self.recipe, content="Test comment content")
+
+        # Create an API request factory to simulate a request
+        factory = APIRequestFactory()
+        request = factory.get('/')
+        request.user = self.user
+
+        # Serialize the comment, and pass the request context with the user
+        from .serializers import CommentSerializer
+        serializer = CommentSerializer(comment, context={'request': request})
+
+        # Check if profile_id and profile_image are included in the serialized data
+        self.assertIn('profile_id', serializer.data)
+        self.assertIn('profile_image', serializer.data)
+
+        # Print output for visual confirmation (optional)
+        print(serializer.data)
