@@ -44,7 +44,6 @@ ALLOWED_HOSTS = [
     '127.0.0.1:8000',
 ]
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -57,6 +56,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'cloudinary',
     'rest_framework',
+    'django_filters',
 
     'profiles',
     'recipes',
@@ -73,6 +73,13 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'project5_api.urls'
+
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend',
+        'rest_framework.filters.SearchFilter',
+    ],
+}
 
 TEMPLATES = [
     {
