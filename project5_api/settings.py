@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
+import dj_database_url
+
 
 if os.path.exists('env.py'):
     import env
@@ -42,6 +44,7 @@ REST_FRAMEWORK = {
     # Pagination
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
+    'DATETIME_FORMAT': '%d %b %Y',
 }
 
 CSRF_TRUSTED_ORIGINS = [
@@ -53,23 +56,31 @@ REST_USE_JWT = True
 JWT_AUTH_SECURE = True
 JWT_AUTH_COOKIE = 'my-app-auth'
 JWT_AUTH_REFRESH_COOKIE = 'my-refresh-token'
+JWT_AUTH_SAMESITE = 'None'
 
 REST_AUTH_SERIALIZERS = {
     'USER_DETAILS_SERIALIZER': 'project5_api.serializers.CurrentUserSerializer'
 }
 
+if 'DEV' not in os.environ:
+    REST_FRAMEWORK['DEFAULT_RENDERER_CLASSES'] = [
+        'rest_framework.renderers.JSONRenderer',
+    ]
+    
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-933qwq#j5tf6urm(9(q$ys%a2o*ze)hqy)7rikq8jwauo6pr@t'
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = 'DEV' in os.environ
 
 ALLOWED_HOSTS = [
     '8000-davidb3rgqv-project5api-dff603ub8x0.ws.codeinstitute-ide.net',
     '127.0.0.1:8000',
+    'project5-api-a299de19cbb3.herokuapp.com',
+    'localhost'
 ]
 
 # Application definition
@@ -92,6 +103,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'dj_rest_auth.registration',
+    'corsheaders',
     
     'profiles',
     'recipes',
@@ -100,6 +112,7 @@ INSTALLED_APPS = [
 ]
 SITE_ID = 1
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -109,14 +122,19 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+if 'CLIENT_ORIGIN' in os.environ:
+     CORS_ALLOWED_ORIGINS = [
+         os.environ.get('CLIENT_ORIGIN')
+     ]
+else:
+    CORS_ALLOWED_ORIGIN_REGEXES = [
+        r"^https://.*\.gitpod\.io$",
+        r"^https://.*\.codeinstitute\.net$",
+    ]
+    
+CORS_ALLOW_CREDENTIALS = True
+     
 ROOT_URLCONF = 'project5_api.urls'
-
-# REST_FRAMEWORK = {
-#     'DEFAULT_FILTER_BACKENDS': [
-#         'django_filters.rest_framework.DjangoFilterBackend',
-#         'rest_framework.filters.SearchFilter',
-#     ],
-# }
 
 TEMPLATES = [
     {
@@ -140,12 +158,18 @@ WSGI_APPLICATION = 'project5_api.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if 'DEV' in os.environ:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': dj_database_url.parse(os.environ.get("DATABASE_URL"))
+    }
+
 
 
 # Password validation
