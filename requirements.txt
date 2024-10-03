@@ -1,3 +1,5 @@
+pip==24.0
+wheel==0.44.0
 setuptools==57.5.0
 asgiref==3.8.1
 cloudinary==1.41.0
