@@ -14,7 +14,9 @@ class ProfileList(generics.ListAPIView):
     serializer_class = ProfileSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     filter_backends = [
-        filters.OrderingFilter
+        filters.OrderingFilter,
+        filters.SearchFilter
+
     ]
     ordering_fields = [
         'recipes_count',
@@ -22,6 +24,12 @@ class ProfileList(generics.ListAPIView):
         'following_count',
         'owner__following__created_at',
         'owner__followed__created_at',
+    ]
+    
+    search_fields = [
+    'owner__username',
+    'name',
+    'content',
     ]
 
     def get_serializer_context(self):
