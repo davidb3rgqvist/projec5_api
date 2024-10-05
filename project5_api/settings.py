@@ -48,8 +48,8 @@ REST_FRAMEWORK = {
 }
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://8000-davidb3rgqv-project5api-dff603ub8x0.ws.codeinstitute-ide.net',
-    'http://localhost:8000',
+    "https://3000-davidb3rgqv-project5foo-2kek9vhh8tz.ws.codeinstitute-ide.net",
+    "https://8000-davidb3rgqv-project5api-dff603ub8x0.ws.codeinstitute-ide.net",
 ]
 
 REST_USE_JWT = True
@@ -123,9 +123,9 @@ MIDDLEWARE = [
 ]
 
 if 'CLIENT_ORIGIN' in os.environ:
-     CORS_ALLOWED_ORIGINS = [
-         os.environ.get('CLIENT_ORIGIN')
-     ]
+    CORS_ALLOWED_ORIGINS = [
+        os.environ.get('CLIENT_ORIGIN')
+    ]
 else:
     CORS_ALLOWED_ORIGIN_REGEXES = [
         r"^https://.*\.gitpod\.io$",
