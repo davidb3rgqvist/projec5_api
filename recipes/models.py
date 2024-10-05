@@ -7,6 +7,12 @@ class Recipe(models.Model):
     short_description = models.CharField(max_length=500)
     ingredients = models.TextField(help_text="List of ingredients separated by commas")
     steps = models.TextField(help_text="Steps to make the recipe")
+    cook_time = models.IntegerField(help_text="Cook time in minutes", default=30)
+    difficulty = models.CharField(
+    max_length=50, 
+    choices=[('Easy', 'Easy'), ('Medium', 'Medium'), ('Hard', 'Hard')], 
+    default='Easy'
+    )
     image = models.ImageField(upload_to='recipes/', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -16,7 +22,7 @@ class Recipe(models.Model):
 
     @property
     def likes_count(self):
-        return self.likes_set.count() 
+        return self.likes_set.count()
     
     
 class Comment(models.Model):

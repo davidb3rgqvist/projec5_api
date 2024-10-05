@@ -11,7 +11,11 @@ class RecipeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Recipe
-        fields = ['id', 'owner', 'title', 'short_description', 'ingredients', 'steps', 'image', 'created_at', 'updated_at', 'likes_count', 'is_liked']
+        fields = [
+            'id', 'owner', 'title', 'short_description', 'ingredients', 
+            'steps', 'cook_time', 'difficulty', 'image', 
+            'created_at', 'updated_at', 'likes_count', 'is_liked'
+        ]
 
     def get_likes_count(self, obj):
         return obj.likes.count()
