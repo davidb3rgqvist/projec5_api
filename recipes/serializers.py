@@ -1,31 +1,7 @@
-from rest_framework import serializers
 from .models import Recipe, Comment
 from likes.models import Like
 from rest_framework import serializers
 from profiles.models import Profile
-
-class RecipeSerializer(serializers.ModelSerializer):
-    owner = serializers.ReadOnlyField(source='owner.username')
-    likes_count = serializers.SerializerMethodField()
-    is_liked = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Recipe
-        fields = [
-            'id', 'owner', 'title', 'short_description', 'ingredients', 
-            'steps', 'cook_time', 'difficulty', 'image', 
-            'created_at', 'updated_at', 'likes_count', 'is_liked'
-        ]
-
-    def get_likes_count(self, obj):
-        return obj.likes.count()
-
-    def get_is_liked(self, obj):
-        user = self.context['request'].user
-        if user.is_authenticated:
-            return Like.objects.filter(owner=user, recipe=obj).exists()
-        return False
-
 
 class CommentSerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
@@ -40,3 +16,27 @@ class CommentSerializer(serializers.ModelSerializer):
     def get_is_owner(self, obj):
         request = self.context.get('request')
         return request.user == obj.owner
+
+
+class RecipeSerializer(serializers.ModelSerializer):
+    owner = serializers.ReadOnlyField(source='owner.username')
+    likes_count = serializers.SerializerMethodField()
+    is_liked = serializers.SerializerMethodField()
+    comments = CommentSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Recipe
+        fields = [
+            'id', 'owner', 'title', 'short_description', 'ingredients', 
+            'steps', 'cook_time', 'difficulty', 'image', 
+            'created_at', 'updated_at', 'likes_count', 'is_liked', 'comments'
+        ]
+
+    def get_likes_count(self, obj):
+        return obj.likes.count()
+
+    def get_is_liked(self, obj):
+        user = self.context['request'].user
+        if user.is_authenticated:
+            return Like.objects.filter(owner=user, recipe=obj).exists()
+        return False
