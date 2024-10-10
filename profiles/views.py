@@ -47,3 +47,7 @@ class ProfileDetail(generics.RetrieveUpdateAPIView):
 
     def get_serializer_context(self):
         return {'request': self.request}
+
+    def perform_update(self, serializer):
+        serializer.save(owner=self.request.user)
+
