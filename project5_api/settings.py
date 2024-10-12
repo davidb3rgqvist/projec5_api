@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 import os
 import dj_database_url
+import datetime
 
 
 if os.path.exists('env.py'):
@@ -57,6 +58,10 @@ JWT_AUTH_SECURE = True
 JWT_AUTH_COOKIE = 'my-app-auth'
 JWT_AUTH_REFRESH_COOKIE = 'my-refresh-token'
 JWT_AUTH_SAMESITE = 'None'
+JWT_AUTH = {
+'JWT_EXPIRATION_DELTA': datetime.timedelta(days=10),
+'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=30),
+}
 
 REST_AUTH_SERIALIZERS = {
     'USER_DETAILS_SERIALIZER': 'project5_api.serializers.CurrentUserSerializer'
