@@ -1,8 +1,35 @@
-from rest_framework import generics, permissions
+from rest_framework import generics, permissions, filters
 from rest_framework.exceptions import ValidationError
 from .models import Like
 from .serializers import LikeSerializer
 from project5_api.permissions import IsOwnerOrReadOnly
+
+
+class LikeListView(generics.ListAPIView):
+    serializer_class = LikeSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    
+    def get_queryset(self):
+        user = self.request.user
+        return Recipe.objects.filter(likes__owner=user).annotate(
+            likes_count=Count('likes', distinct=True)
+        ).order_by('-created_at')
+    
+    filter_backends = [
+        filters.OrderingFilter,
+        filters.SearchFilter
+    ]
+    
+    ordering_fields = [
+        'likes_count',
+        'created_at',
+    ]
+    
+    search_fields = [
+        'title',
+        'description',
+        'ingredients',
+    ]
 
 
 class LikeCreateView(generics.CreateAPIView):
