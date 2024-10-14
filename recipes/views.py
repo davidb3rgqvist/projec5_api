@@ -4,7 +4,8 @@ from .serializers import RecipeSerializer, CommentSerializer
 from project5_api.permissions import IsOwnerOrReadOnly
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
-
+from rest_framework.response import Response
+from rest_framework.decorators import action
 
 class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all().order_by('-created_at')
@@ -19,6 +20,15 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
     def perform_update(self, serializer):
         serializer.save(owner=self.request.user)
+
+    @action(detail=False, methods=['get'])
+    def by_profile(self, request, pk=None):
+        profile_id = request.query_params.get('profile_id')
+        if profile_id:
+            recipes = Recipe.objects.filter(owner__profile__id=profile_id)
+            serializer = self.get_serializer(recipes, many=True)
+            return Response(serializer.data)
+        return Response({'detail': 'Profile ID not provided.'}, status=400)
 
 
 class CommentViewSet(viewsets.ModelViewSet):
