@@ -37,27 +37,29 @@ class LikeListView(generics.ListAPIView):
 class LikeCreateView(generics.CreateAPIView):
     queryset = Like.objects.all()
     serializer_class = LikeSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.IsAuthenticated]
 
     def perform_create(self, serializer):
         user = self.request.user
         recipe = serializer.validated_data['recipe']
+        
         if Like.objects.filter(owner=user, recipe=recipe).exists():
             raise ValidationError("You have already liked this recipe.")
-        serializer.save(owner=self.request.user)
+        
+        serializer.save(owner=user)
 
 
 class LikeDeleteView(generics.DestroyAPIView):
     queryset = Like.objects.all()
     serializer_class = LikeSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
+    permission_classes = [permissions.IsAuthenticated, IsOwnerOrReadOnly]
 
     def get_object(self):
         """
         Override the get_object method to retrieve the like based on the user and recipe.
         """
         user = self.request.user
-        recipe_id = self.kwargs.get('recipe_id') 
+        recipe_id = self.kwargs.get('recipe_id')
 
         try:
             like = Like.objects.get(owner=user, recipe_id=recipe_id)
