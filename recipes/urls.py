@@ -8,4 +8,6 @@ router.register(r'comments', CommentViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('ranked-liked-recipes/', RankedLikedRecipesView.as_view(), name='ranked-liked-recipes'),
+
 ]
