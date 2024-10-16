@@ -3,16 +3,18 @@ from django.db.models import Count
 from rest_framework.exceptions import ValidationError
 from .models import Like
 from .serializers import LikeSerializer
+from recipes.serializers import RecipeSerializer
 from recipes.models import Recipe
 from project5_api.permissions import IsOwnerOrReadOnly
 
 
 class LikeListView(generics.ListAPIView):
-    serializer_class = LikeSerializer
+    serializer_class = RecipeSerializer
     permission_classes = [permissions.IsAuthenticated]
     
     def get_queryset(self):
         user = self.request.user
+
         return Recipe.objects.filter(likes__owner=user).annotate(
             likes_count=Count('likes', distinct=True)
         ).order_by('-created_at')
@@ -29,7 +31,7 @@ class LikeListView(generics.ListAPIView):
     
     search_fields = [
         'title',
-        'description',
+        'short_description',
         'ingredients',
     ]
 
@@ -41,11 +43,11 @@ class LikeCreateView(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         user = self.request.user
-        recipe = serializer.validated_data['recipe']
-        
+        recipe = serializer.validated_data.get('recipe')
+
         if Like.objects.filter(owner=user, recipe=recipe).exists():
             raise ValidationError("You have already liked this recipe.")
-        
+
         serializer.save(owner=user)
 
 
