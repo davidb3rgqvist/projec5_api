@@ -18,7 +18,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all().order_by('-created_at')
     serializer_class = RecipeSerializer
     permission_classes = [
-        permissions.IsAuthenticatedOrReadOnly, 
+        permissions.IsAuthenticated, 
         IsOwnerOrReadOnly
     ]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
@@ -85,7 +85,7 @@ class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all().order_by('-created_at')
     serializer_class = CommentSerializer
     permission_classes = [
-        permissions.IsAuthenticatedOrReadOnly, 
+        permissions.IsAuthenticated, 
         IsOwnerOrReadOnly
     ]
 
