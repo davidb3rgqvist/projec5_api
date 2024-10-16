@@ -1,8 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-
 class Follower(models.Model):
+    """
+    Follower model that tracks the relationship between a 
+    user (owner) and the user they follow (followed).
+    """
     owner = models.ForeignKey(
         User, related_name='following', on_delete=models.CASCADE
     )
@@ -16,4 +19,4 @@ class Follower(models.Model):
         unique_together = ['owner', 'followed']
 
     def __str__(self):
-        return f'{self.owner} {self.followed}'
+        return f'{self.owner} follows {self.followed}'

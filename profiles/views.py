@@ -4,8 +4,13 @@ from .models import Profile
 from .serializers import ProfileSerializer
 from project5_api.permissions import IsOwnerOrReadOnly
 
-
+# List all profiles and include aggregated data
 class ProfileList(generics.ListAPIView):
+    """
+    View for listing all profiles with annotated 
+    data such as recipe counts, followers count, and 
+    following count. Supports filtering and searching.
+    """
     queryset = Profile.objects.annotate(
         posts_count=Count('owner__recipe', distinct=True),
         followers_count=Count('owner__followed', distinct=True),
@@ -16,7 +21,6 @@ class ProfileList(generics.ListAPIView):
     filter_backends = [
         filters.OrderingFilter,
         filters.SearchFilter
-
     ]
     ordering_fields = [
         'recipes_count',
@@ -25,18 +29,24 @@ class ProfileList(generics.ListAPIView):
         'owner__following__created_at',
         'owner__followed__created_at',
     ]
-    
     search_fields = [
-    'owner__username',
-    'name',
-    'content',
+        'owner__username',
+        'name',
+        'content',
     ]
 
     def get_serializer_context(self):
+        """
+        Provide request context to the serializer.
+        """
         return {'request': self.request}
 
-
+# Detail view for retrieving or updating a single profile
 class ProfileDetail(generics.RetrieveUpdateAPIView):
+    """
+    View for retrieving and updating a specific profile.
+    Only the profile owner can update their own profile.
+    """
     queryset = Profile.objects.annotate(
         posts_count=Count('owner__recipe', distinct=True),
         followers_count=Count('owner__followed', distinct=True),
@@ -46,8 +56,14 @@ class ProfileDetail(generics.RetrieveUpdateAPIView):
     permission_classes = [IsOwnerOrReadOnly]
 
     def get_serializer_context(self):
+        """
+        Provide request context to the serializer.
+        """
         return {'request': self.request}
 
     def perform_update(self, serializer):
+        """
+        Save the updated profile data 
+        with the current user as the owner.
+        """
         serializer.save(owner=self.request.user)
-

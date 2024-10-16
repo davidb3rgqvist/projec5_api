@@ -1,9 +1,13 @@
+from rest_framework import serializers
 from .models import Recipe, Comment
 from likes.models import Like
-from rest_framework import serializers
 from profiles.models import Profile
 
 class CommentSerializer(serializers.ModelSerializer):
+    """
+    Serializer for the Comment model, 
+    including related profile details.
+    """
     owner = serializers.ReadOnlyField(source='owner.username')
     is_owner = serializers.SerializerMethodField()
     profile_id = serializers.ReadOnlyField(source='owner.profile.id')
@@ -11,14 +15,24 @@ class CommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Comment
-        fields = ['id', 'recipe', 'owner', 'content', 'created_at', 'updated_at', 'is_owner', 'profile_id', 'profile_image']
+        fields = [
+            'id', 'recipe', 'owner', 'content', 'created_at',
+            'updated_at', 'is_owner', 'profile_id', 'profile_image'
+        ]
 
     def get_is_owner(self, obj):
+        """
+        Check if the current user is the owner of the comment.
+        """
         request = self.context.get('request')
         return request.user == obj.owner
 
 
 class RecipeSerializer(serializers.ModelSerializer):
+    """
+    Serializer for the Recipe model, including 
+    related fields like comments and likes count.
+    """
     owner = serializers.ReadOnlyField(source='owner.username')
     likes_count = serializers.SerializerMethodField()
     is_liked = serializers.SerializerMethodField()
@@ -33,9 +47,15 @@ class RecipeSerializer(serializers.ModelSerializer):
         ]
 
     def get_likes_count(self, obj):
+        """
+        Return the total number of likes for the recipe.
+        """
         return obj.likes.count()
 
     def get_is_liked(self, obj):
+        """
+        Check if the current user has liked the recipe.
+        """
         user = self.context['request'].user
         if user.is_authenticated:
             return Like.objects.filter(owner=user, recipe=obj).exists()
