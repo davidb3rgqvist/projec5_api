@@ -36,14 +36,19 @@ class RecipeViewSet(viewsets.ModelViewSet):
 from rest_framework.pagination import PageNumberPagination
 
 class RankedLikedRecipesView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
         user = request.user
+
         liked_recipes = Recipe.objects.filter(likes__owner=user).distinct()
-        ranked_recipes = sorted(liked_recipes, key=lambda recipe: recipe.likes_count, reverse=True)
+
+        ranked_recipes = sorted(liked_recipes, key=lambda recipe: recipe.likes.count(), reverse=True)
+
         serializer = RecipeSerializer(ranked_recipes, many=True, context={'request': request})
+
         return Response(serializer.data)
+
 
 class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all().order_by('-created_at')
