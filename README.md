@@ -1,131 +1,181 @@
-![CI logo](https://codeinstitute.s3.amazonaws.com/fullstack/ci_logo_small.png)
+# Foorky 2.0 - Backend
 
-Welcome David Bergqvist,
+Foorky 2.0 is an advanced full-stack web application designed to help users manage and share their recipes. This backend API provides all the core functionality for recipe management, user profiles, likes, followers, and comments, including secure user authentication and CRUD operations. It is built using Django Rest Framework (DRF), PostgreSQL, and includes JWT authentication via `dj-rest-auth`.
 
-This is the Code Institute student template for Gitpod. We have preinstalled all of the tools you need to get started. It's perfectly ok to use this template as the basis for your project submissions.
+## Table of Contents
+- [Project Overview](#project-overview)
+- [Database Structure](#database-structure)
+- [Key Features](#key-features)
+- [Technology Used](#technology-used)
+- [Installation](#installation)
+- [API Endpoints](#api-endpoints)
+- [Testing](#testing)
+- [Deployment](#deployment)
+- [Credits](#credits)
 
-You can safely delete this README.md file or change it for your own project. Please do read it at least once, though! It contains some important information about Gitpod and the extensions we use. Some of this information has been updated since the video content was created. The last update to this file was: **June 18, 2024**
+## Project Overview
 
-## Gitpod Reminders
+The backend of Foorky 2.0 is the backbone of the recipe management system. It handles all API requests, user authentication, and the storage of recipes, likes, comments, followers, and user profiles. It is designed to be scalable, secure, and modular, making it easy for developers to contribute and extend functionality. The backend communicates with the frontend via RESTful API calls, providing the essential operations needed for recipe management.
 
-To run a frontend (HTML, CSS, Javascript only) application in Gitpod, in the terminal, type:
+## Database Structure
 
-`python3 -m http.server`
+The database consists of several custom models designed to handle user interactions with the platform:
 
-A blue button should appear to click: _Make Public_,
+1. **User**: Manages user authentication and personal information.
+2. **Profile**: Stores additional user information like name, image, and content.
+3. **Recipe**: Handles all recipe-related data, including ingredients, steps, and cook time.
+4. **Comment**: Allows users to comment on recipes.
+5. **Like**: Tracks user likes on recipes.
+6. **Follower**: Manages followers between users, enabling a social interaction feature.
 
-Another blue button should appear to click: _Open Browser_.
+## Key Features
 
-To run a backend Python file, type `python3 app.py` if your Python file is named `app.py`, of course.
+- **User Authentication**: Secure user registration, login, and logout using JWT.
+- **Recipe Management**: Create, update, and delete recipes, with features like ingredients and steps.
+- **Comments**: Users can comment on recipes and engage in discussions.
+- **Likes**: Users can like recipes, with counts of likes displayed for each recipe.
+- **Followers**: Users can follow each other, creating a network of culinary enthusiasts.
+- **Profile Management**: Update profile details and view other users' profiles.
+- **Search and Filtering**: Search recipes by ingredients, titles, or descriptions, and filter based on difficulty or cook time.
 
-A blue button should appear to click: _Make Public_,
+## Technology Used
 
-Another blue button should appear to click: _Open Browser_.
+- **Backend**: Django Rest Framework (DRF) for building RESTful APIs.
+- **Database**: PostgreSQL for managing data.
+- **Authentication**: JWT Authentication via `dj-rest-auth` for secure login.
+- **Cloud Storage**: Cloudinary for storing and serving images.
+- **Deployment**: Heroku for hosting the backend.
 
-By Default, Gitpod gives you superuser security privileges. Therefore, you do not need to use the `sudo` (superuser do) command in the bash terminal in any of the lessons.
+## Installation
 
-To log into the Heroku toolbelt CLI:
+1. **Clone the Repository**:
+    ```bash
+    git clone https://github.com/yourusername/foorky-2.0-backend.git
+    cd foorky-2.0-backend
+    ```
 
-1. Log in to your Heroku account and go to *Account Settings* in the menu under your avatar.
-2. Scroll down to the *API Key* and click *Reveal*
-3. Copy the key
-4. In Gitpod, from the terminal, run `heroku_config`
-5. Paste in your API key when asked
+2. **Create a Virtual Environment**:
+    ```bash
+    python -m venv env
+    source env/bin/activate
+    ```
 
-You can now use the `heroku` CLI program - try running `heroku apps` to confirm it works. This API key is unique and private to you, so do not share it. If you accidentally make it public, you can create a new one with _Regenerate API Key_.
+3. **Install Dependencies**:
+    ```bash
+    pip install -r requirements.txt
+    ```
 
-### Connecting your Mongo database
+4. **Set Up PostgreSQL Database**:
+    Update your `settings.py` with your local PostgreSQL database credentials or set the `DATABASE_URL` environment variable.
 
-- **Connect to Mongo CLI on a IDE**
-- navigate to your MongoDB Clusters Sandbox
-- click **"Connect"** button
-- select **"Connect with the MongoDB shell"**
-- select **"I have the mongo shell installed"**
-- choose **mongosh (2.0 or later)** for : **"Select your mongo shell version"**
-- choose option: **"Run your connection string in your command line"**
-- in the terminal, paste the copied code `mongo "mongodb+srv://<CLUSTER-NAME>.mongodb.net/<DBname>" --apiVersion 1 --username <USERNAME>`
-  - replace all `<angle-bracket>` keys with your own data
-- enter password _(will not echo **\*\*\*\*** on screen)_
+5. **Apply Migrations**:
+    ```bash
+    python manage.py migrate
+    ```
 
-------
+6. **Create Superuser (Optional)**:
+    ```bash
+    python manage.py createsuperuser
+    ```
 
-## Release History
+7. **Run the Development Server**:
+    ```bash
+    python manage.py runserver
+    ```
 
-We continually tweak and adjust this template to help give you the best experience. Here is the version history:
+## API Endpoints
 
-**June 18, 2024,** Add Mongo back into template
+The backend provides several endpoints for the API. Here are a few examples:
 
-**June 14, 2024,** Temporarily remove Mongo until the key issue is resolved
+## Admin and Authentication
+- **`admin/`**: Admin interface for the Django application.
+- **`api-auth/`**: DRF browsable API login.
 
-**May 28 2024:** Fix Mongo and Links installs
+## Authentication (via dj-rest-auth)
+- **`dj-rest-auth/`**: Endpoints for login, logout, password reset, etc.
+- **`dj-rest-auth/registration/`**: User registration.
 
-**April 26 2024:** Update node version to 16
+## Recipe Endpoints
+- **`recipes/` [GET, POST]**: List all recipes or create a new recipe. `[name='recipe-list']`
+- **`recipes/by_profile/` [GET]**: List recipes filtered by user profile. `[name='recipe-by-profile']`
+- **`recipes/(?P<pk>[^/.]+)/` [GET, PUT, DELETE]**: Retrieve, update, or delete a specific recipe by ID. `[name='recipe-detail']`
 
-**September 20 2023:** Update Python version to 3.9.17.
+## Comment Endpoints
+- **`comments/` [GET, POST]**: List all comments or create a new comment. `[name='comment-list']`
+- **`comments/(?P<pk>[^/.]+)/` [GET, PUT, DELETE]**: Retrieve, update, or delete a specific comment by ID. `[name='comment-detail']`
 
-**September 1 2021:** Remove `PGHOSTADDR` environment variable.
+## Ranked Liked Recipes
+- **`ranked-liked-recipes/` [GET]**: List liked recipes by the user, ranked by the number of likes. `[name='ranked-liked-recipes']`
 
-**July 19 2021:** Remove `font_fix` script now that the terminal font issue is fixed.
+## Likes Endpoints
+- **`likes/` [POST]**: Like a recipe. `[name='like-create']`
+- **`likes/list/` [GET]**: List all liked recipes by the user. `[name='like-list']`
+- **`likes/<int:recipe_id>/` [DELETE]**: Unlike a recipe by recipe ID. `[name='like-delete']`
 
-**July 2 2021:** Remove extensions that are not available in Open VSX.
+## Profile Endpoints
+- **`profiles/` [GET]**: List all profiles. `[name='profile-list']`
+- **`profiles/<int:pk>/` [GET, PUT, DELETE]**: Retrieve, update, or delete a specific profile by ID. `[name='profile-detail']`
 
-**June 30 2021:** Combined the P4 and P5 templates into one file, added the uptime script. See the FAQ at the end of this file.
+## Followers Endpoints
+- **`followers/` [GET, POST]**: List all followers or follow a user. `[name='follower-list']`
+- **`followers/<int:pk>/` [DELETE]**: Unfollow a user by ID. `[name='follower-detail']`
 
-**June 10 2021:** Added: `font_fix` script and alias to fix the Terminal font issue
+## Testing
 
-**May 10 2021:** Added `heroku_config` script to allow Heroku API key to be stored as an environment variable.
+Manual and automated testing was done to ensure the stability and functionality of the backend.
 
-**April 7 2021:** Upgraded the template for VS Code instead of Theia.
+- **Unit Tests**: Created using Django's `TestCase` framework.
+- **API Tests**: Utilized Django Rest Framework's `APITestCase` to validate the behavior of API endpoints.
+- **Manual Testing**: Performed on the deployed version to ensure all API endpoints are functioning correctly with the frontend.
 
-**October 21 2020:** Versions of the HTMLHint, Prettier, Bootstrap4 CDN and Auto Close extensions updated. The Python extension needs to stay the same version for now.
+To run the tests:
+```bash
+python manage.py test
 
-**October 08 2020:** Additional large Gitpod files (`core.mongo*` and `core.python*`) are now hidden in the Explorer, and have been added to the `.gitignore` by default.
+## Deployment
 
-**September 22 2020:** Gitpod occasionally creates large `core.Microsoft` files. These are now hidden in the Explorer. A `.gitignore` file has been created to make sure these files will not be committed, along with other common files.
+The backend for Foorky 2.0 is deployed using **Heroku**, ensuring that the API is accessible for the frontend. Follow these steps to deploy the backend:
 
-**April 16 2020:** The template now automatically installs MySQL instead of relying on the Gitpod MySQL image. The message about a Python linter not being installed has been dealt with, and the set-up files are now hidden in the Gitpod file explorer.
+1. **Set Up Heroku**:
+    - Sign up for a Heroku account at [Heroku](https://www.heroku.com/).
+    - Create a new Heroku app from the dashboard.
 
-**April 13 2020:** Added the _Prettier_ code beautifier extension instead of the code formatter built-in to Gitpod.
+2. **Link GitHub Repository**:
+    - In your Heroku app settings, connect your GitHub repository for continuous deployment.
+    - Enable automatic deployments if you want Heroku to redeploy every time you push changes to the GitHub repository.
 
-**February 2020:** The initialisation files now _do not_ auto-delete. They will remain in your project. You can safely ignore them. They just make sure that your workspace is configured correctly each time you open it. It will also prevent the Gitpod configuration popup from appearing.
+3. **Configure PostgreSQL**:
+    - Add the **PostgreSQL** add-on from Heroku’s resources tab.
+    - Heroku will automatically configure the `DATABASE_URL` environment variable. Ensure this is used in your Django settings to point to the correct database.
 
-**December 2019:** Added Eventyret's Bootstrap 4 extension. Type `!bscdn` in a HTML file to add the Bootstrap boilerplate. Check out the <a href="https://github.com/Eventyret/vscode-bcdn" target="_blank">README.md file at the official repo</a> for more options.
+4. **Environment Variables**:
+    - Set environment variables in the Heroku dashboard under the "Settings" tab.
+    - Include sensitive variables like `SECRET_KEY`, `CLOUDINARY_URL`, and `DEBUG=False` (for production).
+    - Example environment variables:
+      ```bash
+      SECRET_KEY=your-secret-key
+      CLOUDINARY_URL=cloudinary://your-api-key
+      DEBUG=False
+      ```
 
-------
+5. **Deploy the Application**:
+    - In your Heroku app dashboard, trigger a manual deployment or push the latest changes to your connected GitHub repository.
+    - Use the Heroku CLI to manage your app if needed:
+      ```bash
+      heroku git:remote -a your-app-name
+      git push heroku main
+      ```
 
-## FAQ about the uptime script
+6. **Verify Deployment**:
+    - Check that your app is live by visiting the Heroku URL provided. Ensure all API endpoints are functioning and connected to your frontend application.
 
-**Why have you added this script?**
+## Credits
 
-It will help us to calculate how many running workspaces there are at any one time, which greatly helps us with cost and capacity planning. It will help us decide on the future direction of our cloud-based IDE strategy.
+- **Code Institute**: The **Django REST Framework (DRF) API Walkthrough** project served as an inspiration and foundation for the development of the Foorky 2.0 backend.
+- **Django REST Framework**: For building a flexible, powerful API system with support for authentication and permissions.
+- **Heroku**: For cloud hosting and managing deployments easily with GitHub integration.
+- **Cloudinary**: Used for storing and delivering media files such as images.
+- **PostgreSQL**: The database management system that stores all structured data related to users, recipes, comments, likes, and followers.
 
-**How will this affect me?**
+This project is a collaborative effort built on open-source technologies and the support of the developer community. Special thanks to tutorials, mentors, and resources that guided the creation of this full-stack web application.
 
-For everyday usage of Gitpod, it doesn’t have any effect at all. The script only captures the following data:
-
-- An ID that is randomly generated each time the workspace is started.
-- The current date and time
-- The workspace status of “started” or “running”, which is sent every 5 minutes.
-
-It is not possible for us or anyone else to trace the random ID back to an individual, and no personal data is being captured. It will not slow down the workspace or affect your work.
-
-**So….?**
-
-We want to tell you this so that we are being completely transparent about the data we collect and what we do with it.
-
-**Can I opt out?**
-
-Yes, you can. Since no personally identifiable information is being captured, we'd appreciate it if you let the script run; however if you are unhappy with the idea, simply run the following commands from the terminal window after creating the workspace, and this will remove the uptime script:
-
-```
-pkill uptime.sh
-rm .vscode/uptime.sh
-```
-
-**Anything more?**
-
-Yes! We'd strongly encourage you to look at the source code of the `uptime.sh` file so that you know what it's doing. As future software developers, it will be great practice to see how these shell scripts work.
-
----
-
-Happy coding!
