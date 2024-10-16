@@ -1,9 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+
 class Follower(models.Model):
     """
-    Follower model that tracks the relationship between a 
+    Follower model that tracks the relationship between a
     user (owner) and the user they follow (followed).
     """
     owner = models.ForeignKey(

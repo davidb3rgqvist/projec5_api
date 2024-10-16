@@ -7,6 +7,7 @@ from recipes.serializers import RecipeSerializer
 from recipes.models import Recipe
 from project5_api.permissions import IsOwnerOrReadOnly
 
+
 class LikeListView(generics.ListAPIView):
     """
     API view to list all recipes that the authenticated user has liked.
@@ -31,7 +32,6 @@ class LikeListView(generics.ListAPIView):
     search_fields = ['title', 'short_description', 'ingredients']
 
 
-
 class LikeCreateView(generics.CreateAPIView):
     """
     API view to allow users to 'like' a recipe.
@@ -42,8 +42,8 @@ class LikeCreateView(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         """
-        Create a like instance for the authenticated 
-        user and the given recipe. Raise an error if 
+        Create a like instance for the authenticated
+        user and the given recipe. Raise an error if
         the user has already liked the recipe.
         """
         user = self.request.user
@@ -77,4 +77,3 @@ class LikeDeleteView(generics.DestroyAPIView):
         except Like.DoesNotExist:
             raise ValidationError("You haven't liked this recipe yet.")
         return like
-

@@ -2,10 +2,11 @@ from django.db import IntegrityError
 from rest_framework import serializers
 from .models import Follower
 
+
 class FollowerSerializer(serializers.ModelSerializer):
     """
     Serializer for the Follower model.
-    Handles read-only fields for owner 
+    Handles read-only fields for owner
     and the followed user's name.
     """
     owner = serializers.ReadOnlyField(source='owner.username')
@@ -17,7 +18,7 @@ class FollowerSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         """
-        Custom create method to handle 
+        Custom create method to handle
         IntegrityError for duplicate follows.
         """
         try:

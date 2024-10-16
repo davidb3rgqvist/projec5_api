@@ -3,6 +3,7 @@ from .models import Like
 from recipes.models import Recipe
 from recipes.serializers import RecipeSerializer
 
+
 class LikeSerializer(serializers.ModelSerializer):
     """
     Serializer for the Like model.

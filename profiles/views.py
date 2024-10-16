@@ -67,3 +67,19 @@ class ProfileDetail(generics.RetrieveUpdateAPIView):
         with the current user as the owner.
         """
         serializer.save(owner=self.request.user)
+        
+# Delete view for removing a profile
+class ProfileDelete(generics.DestroyAPIView):
+    """
+    View for deleting a specific profile.
+    Only the profile owner can delete their own profile.
+    """
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
+    permission_classes = [IsOwnerOrReadOnly]
+
+    def get_serializer_context(self):
+        """
+        Provide request context to the serializer.
+        """
+        return {'request': self.request}
