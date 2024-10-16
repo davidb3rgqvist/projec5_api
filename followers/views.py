@@ -10,7 +10,7 @@ class FollowerList(generics.ListCreateAPIView):
     Authenticated users can follow others,
     and search filters are enabled.
     """
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.IsAuthenticated]
     queryset = Follower.objects.all()
     serializer_class = FollowerSerializer
     filter_backends = [filters.SearchFilter]
