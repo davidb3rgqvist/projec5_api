@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import RecipeViewSet, CommentViewSet
+from .views import RecipeViewSet, CommentViewSet, RankedLikedRecipesView
 
 router = DefaultRouter()
 router.register(r'recipes', RecipeViewSet)

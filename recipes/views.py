@@ -1,3 +1,5 @@
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.views import APIView
 from rest_framework import viewsets, permissions
 from .models import Recipe, Comment
 from .serializers import RecipeSerializer, CommentSerializer
@@ -30,6 +32,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
             return Response(serializer.data)
         return Response({'detail': 'Profile ID not provided.'}, status=400)
 
+
 from rest_framework.pagination import PageNumberPagination
 
 class RankedLikedRecipesView(APIView):
@@ -37,17 +40,10 @@ class RankedLikedRecipesView(APIView):
 
     def get(self, request):
         user = request.user
-        ranked_recipes = Recipe.objects.filter(likes__owner=user).annotate(
-            likes_count=models.Count('likes')
-        ).order_by('-likes_count').distinct()
-
-        paginator = PageNumberPagination()
-        paginated_recipes = paginator.paginate_queryset(ranked_recipes, request)
-
-        serializer = RecipeSerializer(paginated_recipes, many=True, context={'request': request})
-
-        return paginator.get_paginated_response(serializer.data)
-
+        liked_recipes = Recipe.objects.filter(likes__owner=user).distinct()
+        ranked_recipes = sorted(liked_recipes, key=lambda recipe: recipe.likes_count, reverse=True)
+        serializer = RecipeSerializer(ranked_recipes, many=True, context={'request': request})
+        return Response(serializer.data)
 
 class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all().order_by('-created_at')
