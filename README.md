@@ -140,6 +140,30 @@ Manual and automated testing was done to ensure the stability and functionality 
 - **API Tests**: Utilized Django Rest Framework's `APITestCase` to validate the behavior of API endpoints.
 - **Manual Testing**: Performed on the deployed version to ensure all API endpoints are functioning correctly with the frontend.
 
+### Manual Testing
+
+Below is the table documenting the manual testing conducted for various API endpoints, covering CRUD operations, authentication, and permissions.
+
+| **Test Case**                        | **Endpoint**                     | **Method** | **Description**                                                     | **Expected Result**                                                                 | **Pass/Fail** |
+|--------------------------------------|----------------------------------|------------|---------------------------------------------------------------------|------------------------------------------------------------------------------------|---------------|
+| **User Registration**                | `/dj-rest-auth/registration/`    | `POST`     | Register a new user with username, email, and password.              | User is successfully registered, and a token is returned.                         | Pass          |
+| **User Login**                       | `/dj-rest-auth/login/`           | `POST`     | Log in an existing user.                                             | User is successfully logged in, and a token is returned.                          | Pass          |
+| **Create Recipe**                    | `/recipes/`                      | `POST`     | Create a new recipe (with valid token).                              | Recipe is successfully created and is associated with the logged-in user.         | Pass          |
+| **List All Recipes**                 | `/recipes/`                      | `GET`      | Retrieve all recipes.                                                | A list of all recipes is returned.                                                | Pass          |
+| **Retrieve Single Recipe by ID**     | `/recipes/1/`                    | `GET`      | Retrieve a specific recipe by its ID.                                | The recipe with the given ID is returned.                                         | Pass          |
+| **Update Recipe (Owner)**            | `/recipes/1/`                    | `PUT`      | Update an existing recipe (owned by the logged-in user).              | Recipe is successfully updated.                                                   | Pass          |
+| **Update Recipe (Not Owner)**        | `/recipes/2/`                    | `PUT`      | Try to update a recipe owned by another user.                        | User is forbidden from updating the recipe (403 error).                           | Pass          |
+| **Delete Recipe (Owner)**            | `/recipes/1/`                    | `DELETE`   | Delete a recipe (owned by the logged-in user).                        | Recipe is successfully deleted.                                                   | Pass          |
+| **Delete Recipe (Not Owner)**        | `/recipes/2/`                    | `DELETE`   | Try to delete a recipe owned by another user.                        | User is forbidden from deleting the recipe (403 error).                           | Pass          |
+| **Add Comment to Recipe**            | `/comments/`                     | `POST`     | Add a comment to a specific recipe.                                  | Comment is successfully added to the recipe.                                      | Pass          |
+| **List All Comments for Recipe**     | `/comments/`                     | `GET`      | Retrieve all comments for a specific recipe.                         | A list of comments for the recipe is returned.                                    | Pass          |
+| **Like a Recipe**                    | `/likes/`                        | `POST`     | Like a recipe (valid token).                                         | Recipe is successfully liked, and the like is associated with the user.           | Pass          |
+| **Unlike a Recipe**                  | `/likes/1/`                      | `DELETE`   | Unlike a previously liked recipe.                                    | Recipe is successfully unliked.                                                   | Pass          |
+| **Follow a User**                    | `/followers/`                    | `POST`     | Follow another user.                                                 | User is successfully followed, and a follower relationship is created.            | Pass          |
+| **Unfollow a User**                  | `/followers/1/`                  | `DELETE`   | Unfollow a user.                                                     | User is successfully unfollowed.                                                  | Pass          |
+| **Permissions Test: Update Own Profile** | `/profiles/1/`                | `PUT`      | Update profile information (for logged-in user).                     | Profile is successfully updated.                                                  | Pass          |
+| **Permissions Test: Update Another User's Profile** | `/profiles/2/`         | `PUT`      | Try to update another user's profile.                                | User is forbidden from updating the profile (403 error).                          | Pass          |
+
 ### Code Quality
 - All backend Python code adheres to the PEP8 style guide.
 - We used `https://pep8ci.herokuapp.com/` to ensure that the code is properly linted and free of major style violations.
