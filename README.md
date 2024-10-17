@@ -35,7 +35,7 @@ The database consists of several custom models designed to handle user interacti
 
 Below is the ERD that outlines the relationships between the various models:
 
-![ERD](assets/erd-diagram.png)
+![ERD](assets/doc/erd-diagram.png)
 
 ### CRUD Functionality
 - The backend fully supports CRUD (Create, Read, Update, Delete) operations for all resources, including `recipes`, `comments`, `likes`, and `profiles`.
