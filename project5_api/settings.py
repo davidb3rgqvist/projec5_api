@@ -138,6 +138,7 @@ else:
 CORS_ALLOWED_ORIGINS = [
     'https://foorky-fe-79ffc00345fc.herokuapp.com',
     'https://project5-api-a299de19cbb3.herokuapp.com',
+    '*'
 ]
 
 CORS_ALLOW_CREDENTIALS = True
