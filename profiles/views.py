@@ -4,11 +4,12 @@ from .models import Profile
 from .serializers import ProfileSerializer
 from project5_api.permissions import IsOwnerOrReadOnly
 
+
 # List all profiles and include aggregated data
 class ProfileList(generics.ListAPIView):
     """
-    View for listing all profiles with annotated 
-    data such as recipe counts, followers count, and 
+    View for listing all profiles with annotated
+    data such as recipe counts, followers count, and
     following count. Supports filtering and searching.
     """
     queryset = Profile.objects.annotate(
@@ -41,6 +42,7 @@ class ProfileList(generics.ListAPIView):
         """
         return {'request': self.request}
 
+
 # Detail view for retrieving or updating a single profile
 class ProfileDetail(generics.RetrieveUpdateAPIView):
     """
@@ -63,11 +65,12 @@ class ProfileDetail(generics.RetrieveUpdateAPIView):
 
     def perform_update(self, serializer):
         """
-        Save the updated profile data 
+        Save the updated profile data
         with the current user as the owner.
         """
         serializer.save(owner=self.request.user)
-        
+
+
 # Delete view for removing a profile and its associated user
 class ProfileDelete(generics.DestroyAPIView):
     """
@@ -88,7 +91,7 @@ class ProfileDelete(generics.DestroyAPIView):
         """
         Custom deletion logic to delete the profile and the associated user.
         """
-        
+
         user = instance.owner
         user.delete()
 

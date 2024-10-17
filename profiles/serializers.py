@@ -3,11 +3,12 @@ from .models import Profile
 from followers.models import Follower
 from recipes.models import Recipe
 
+
 # Serializer for the Profile model
 class ProfileSerializer(serializers.ModelSerializer):
     """
-    Serializer for the Profile model to handle 
-    serialization and deserialization of profile data, 
+    Serializer for the Profile model to handle
+    serialization and deserialization of profile data,
     including additional computed fields.
     """
     owner = serializers.ReadOnlyField(source='owner.username')
@@ -19,15 +20,15 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     def get_is_owner(self, obj):
         """
-        Check if the currently authenticated 
+        Check if the currently authenticated
         user is the owner of the profile.
         """
         request = self.context['request']
         return request.user == obj.owner
-    
+
     def get_following_id(self, obj):
         """
-        Return the ID of the 'Follower' relationship 
+        Return the ID of the 'Follower' relationship
         if the current user follows this profile.
         """
         user = self.context['request'].user
@@ -47,7 +48,7 @@ class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         fields = [
-            'id', 'owner', 'created_at', 'updated_at', 'name', 
-            'content', 'image', 'is_owner', 'following_id', 
+            'id', 'owner', 'created_at', 'updated_at', 'name',
+            'content', 'image', 'is_owner', 'following_id',
             'recipes_count', 'followers_count', 'following_count',
         ]

@@ -103,7 +103,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'dj_rest_auth.registration',
     'corsheaders',
-    
+
     # Custom apps
     'profiles',
     'recipes',
@@ -134,9 +134,9 @@ else:
         r"^https://.*\.gitpod\.io$",
         r"^https://.*\.codeinstitute\.net$",
     ]
-    
+
 CORS_ALLOW_CREDENTIALS = True
-     
+
 # URL configuration
 ROOT_URLCONF = 'project5_api.urls'
 

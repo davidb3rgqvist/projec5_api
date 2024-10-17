@@ -8,17 +8,18 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from rest_framework.decorators import action
 
+
 class RecipeViewSet(viewsets.ModelViewSet):
     """
-    ViewSet for handling Recipe CRUD operations, with filtering, 
-    searching, and listing capabilities. Recipes can be filtered 
-    by owner and title, and searched by title, ingredients, 
+    ViewSet for handling Recipe CRUD operations, with filtering,
+    searching, and listing capabilities. Recipes can be filtered
+    by owner and title, and searched by title, ingredients,
     and short description.
     """
     queryset = Recipe.objects.all().order_by('-created_at')
     serializer_class = RecipeSerializer
     permission_classes = [
-        permissions.IsAuthenticated, 
+        permissions.IsAuthenticated,
         IsOwnerOrReadOnly
     ]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
@@ -52,27 +53,27 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
 class RankedLikedRecipesView(APIView):
     """
-    API view to retrieve a list of recipes liked by the 
+    API view to retrieve a list of recipes liked by the
     current user, ranked by the number of likes in descending order.
     """
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
         """
-        Get the recipes liked by the current user, 
+        Get the recipes liked by the current user,
         ranked by the number of likes.
         """
         user = request.user
         liked_recipes = Recipe.objects.filter(likes__owner=user).distinct()
         ranked_recipes = sorted(
-            liked_recipes, 
-            key=lambda recipe: recipe.likes.count(), 
+            liked_recipes,
+            key=lambda recipe: recipe.likes.count(),
             reverse=True
         )
 
         serializer = RecipeSerializer(
-            ranked_recipes, 
-            many=True, 
+            ranked_recipes,
+            many=True,
             context={'request': request}
         )
         return Response(serializer.data)
@@ -85,7 +86,7 @@ class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all().order_by('-created_at')
     serializer_class = CommentSerializer
     permission_classes = [
-        permissions.IsAuthenticated, 
+        permissions.IsAuthenticated,
         IsOwnerOrReadOnly
     ]
 
