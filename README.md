@@ -2,6 +2,9 @@
 
 Foorky 2.0 is an advanced full-stack web application designed to help users manage and share their recipes. This backend API provides all the core functionality for recipe management, user profiles, likes, followers, and comments, including secure user authentication and CRUD operations. It is built using Django Rest Framework (DRF), PostgreSQL, and includes JWT authentication via `dj-rest-auth`.
 
+[Deployed api](https://project5-api-a299de19cbb3.herokuapp.com/)
+[Repository](https://github.com/davidb3rgqvist/project5_api)
+
 ## Table of Contents
 - [Project Overview](#project-overview)
 - [Database Structure](#database-structure)
@@ -28,6 +31,15 @@ The database consists of several custom models designed to handle user interacti
 5. **Like**: Tracks user likes on recipes.
 6. **Follower**: Manages followers between users, enabling a social interaction feature.
 
+### Entity-Relationship Diagram
+
+Below is the ERD that outlines the relationships between the various models:
+
+![ERD](assets/erd-diagram.png)
+
+### CRUD Functionality
+- The backend fully supports CRUD (Create, Read, Update, Delete) operations for all resources, including `recipes`, `comments`, `likes`, and `profiles`.
+
 ## Key Features
 
 - **User Authentication**: Secure user registration, login, and logout using JWT.
@@ -50,7 +62,7 @@ The database consists of several custom models designed to handle user interacti
 
 1. **Clone the Repository**:
     ```bash
-    git clone https://github.com/yourusername/foorky-2.0-backend.git
+    git clone https://github.com/davidb3rgqvist/project5_api
     cd foorky-2.0-backend
     ```
 
@@ -87,36 +99,36 @@ The database consists of several custom models designed to handle user interacti
 
 The backend provides several endpoints for the API. Here are a few examples:
 
-## Admin and Authentication
+### Admin and Authentication
 - **`admin/`**: Admin interface for the Django application.
 - **`api-auth/`**: DRF browsable API login.
 
-## Authentication (via dj-rest-auth)
+### Authentication (via dj-rest-auth)
 - **`dj-rest-auth/`**: Endpoints for login, logout, password reset, etc.
 - **`dj-rest-auth/registration/`**: User registration.
 
-## Recipe Endpoints
+### Recipe Endpoints
 - **`recipes/` [GET, POST]**: List all recipes or create a new recipe. `[name='recipe-list']`
 - **`recipes/by_profile/` [GET]**: List recipes filtered by user profile. `[name='recipe-by-profile']`
 - **`recipes/(?P<pk>[^/.]+)/` [GET, PUT, DELETE]**: Retrieve, update, or delete a specific recipe by ID. `[name='recipe-detail']`
 
-## Comment Endpoints
+### Comment Endpoints
 - **`comments/` [GET, POST]**: List all comments or create a new comment. `[name='comment-list']`
 - **`comments/(?P<pk>[^/.]+)/` [GET, PUT, DELETE]**: Retrieve, update, or delete a specific comment by ID. `[name='comment-detail']`
 
-## Ranked Liked Recipes
+### Ranked Liked Recipes
 - **`ranked-liked-recipes/` [GET]**: List liked recipes by the user, ranked by the number of likes. `[name='ranked-liked-recipes']`
 
-## Likes Endpoints
+### Likes Endpoints
 - **`likes/` [POST]**: Like a recipe. `[name='like-create']`
 - **`likes/list/` [GET]**: List all liked recipes by the user. `[name='like-list']`
 - **`likes/<int:recipe_id>/` [DELETE]**: Unlike a recipe by recipe ID. `[name='like-delete']`
 
-## Profile Endpoints
+### Profile Endpoints
 - **`profiles/` [GET]**: List all profiles. `[name='profile-list']`
 - **`profiles/<int:pk>/` [GET, PUT, DELETE]**: Retrieve, update, or delete a specific profile by ID. `[name='profile-detail']`
 
-## Followers Endpoints
+### Followers Endpoints
 - **`followers/` [GET, POST]**: List all followers or follow a user. `[name='follower-list']`
 - **`followers/<int:pk>/` [DELETE]**: Unfollow a user by ID. `[name='follower-detail']`
 
@@ -128,9 +140,11 @@ Manual and automated testing was done to ensure the stability and functionality 
 - **API Tests**: Utilized Django Rest Framework's `APITestCase` to validate the behavior of API endpoints.
 - **Manual Testing**: Performed on the deployed version to ensure all API endpoints are functioning correctly with the frontend.
 
-To run the tests:
-```bash
-python manage.py test
+### Code Quality
+- All backend Python code adheres to the PEP8 style guide.
+- We used `https://pep8ci.herokuapp.com/` to ensure that the code is properly linted and free of major style violations.
+
+![Linter-test](assets/doc/pp5-linter-test.png)
 
 ## Deployment
 
@@ -159,12 +173,7 @@ The backend for Foorky 2.0 is deployed using **Heroku**, ensuring that the API i
       ```
 
 5. **Deploy the Application**:
-    - In your Heroku app dashboard, trigger a manual deployment or push the latest changes to your connected GitHub repository.
-    - Use the Heroku CLI to manage your app if needed:
-      ```bash
-      heroku git:remote -a your-app-name
-      git push heroku main
-      ```
+    - In your Heroku app dashboard, trigger a manual deployment to your connected GitHub repository.
 
 6. **Verify Deployment**:
     - Check that your app is live by visiting the Heroku URL provided. Ensure all API endpoints are functioning and connected to your frontend application.
@@ -178,4 +187,3 @@ The backend for Foorky 2.0 is deployed using **Heroku**, ensuring that the API i
 - **PostgreSQL**: The database management system that stores all structured data related to users, recipes, comments, likes, and followers.
 
 This project is a collaborative effort built on open-source technologies and the support of the developer community. Special thanks to tutorials, mentors, and resources that guided the creation of this full-stack web application.
-
