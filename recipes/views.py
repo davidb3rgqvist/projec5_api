@@ -19,7 +19,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all().order_by('-created_at')
     serializer_class = RecipeSerializer
     permission_classes = [
-        permissions.IsAuthenticated,
+        permissions.IsAuthenticatedOrReadOnly,
         IsOwnerOrReadOnly
     ]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
@@ -56,7 +56,7 @@ class RankedLikedRecipesView(APIView):
     API view to retrieve a list of recipes liked by the
     current user, ranked by the number of likes in descending order.
     """
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def get(self, request):
         """
@@ -86,7 +86,7 @@ class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all().order_by('-created_at')
     serializer_class = CommentSerializer
     permission_classes = [
-        permissions.IsAuthenticated,
+        permissions.IsAuthenticatedOrReadOnly,
         IsOwnerOrReadOnly
     ]
 

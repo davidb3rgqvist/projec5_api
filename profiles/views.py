@@ -18,7 +18,7 @@ class ProfileList(generics.ListAPIView):
         following_count=Count('owner__following', distinct=True)
     ).order_by('-created_at')
     serializer_class = ProfileSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     filter_backends = [
         filters.OrderingFilter,
         filters.SearchFilter

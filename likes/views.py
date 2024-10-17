@@ -14,7 +14,7 @@ class LikeListView(generics.ListAPIView):
     Allows filtering and searching on the recipe data.
     """
     serializer_class = RecipeSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def get_queryset(self):
         """
@@ -38,7 +38,7 @@ class LikeCreateView(generics.CreateAPIView):
     """
     queryset = Like.objects.all()
     serializer_class = LikeSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def perform_create(self, serializer):
         """
