@@ -7,6 +7,7 @@ Foorky 2.0 is an advanced full-stack web application designed to help users mana
 
 ## Table of Contents
 - [Project Overview](#project-overview)
+- [Backend User Stories](#Backend-user-stories)
 - [Database Structure](#database-structure)
 - [Key Features](#key-features)
 - [Technology Used](#technology-used)
@@ -19,6 +20,32 @@ Foorky 2.0 is an advanced full-stack web application designed to help users mana
 ## Project Overview
 
 The backend of Foorky 2.0 is the backbone of the recipe management system. It handles all API requests, user authentication, and the storage of recipes, likes, comments, followers, and user profiles. It is designed to be scalable, secure, and modular, making it easy for developers to contribute and extend functionality. The backend communicates with the frontend via RESTful API calls, providing the essential operations needed for recipe management.
+
+## Backend User Stories
+
+| Category     | As a              | I want to                                  | So that I can                                  | Endpoints / Features                               |
+|--------------|-------------------|--------------------------------------------|------------------------------------------------|---------------------------------------------------|
+| Auth         | User               | Register for an account                    | Access my personal profile and share recipes   | POST /auth/users/, POST /auth/token/login/         |
+| Auth         | User               | Log in to my account                       | Access my personal feed and interact with recipes | POST /auth/token/login/                            |
+| Auth         | User               | Log out of my account                      | Ensure my session is secure                    | POST /auth/token/logout/                           |
+| Recipes      | User               | Create a recipe                            | Share my favorite meals with others            | POST /recipes/                                     |
+| Recipes      | User               | View a list of recipes                     | Browse through recipes shared by all users     | GET /recipes/                                      |
+| Recipes      | User               | View a specific recipe                     | See the ingredients and instructions for a selected recipe | GET /recipes/{id}/                                 |
+| Recipes      | User               | Edit a recipe I created                    | Correct any mistakes in my recipe              | PUT /recipes/{id}/, PATCH /recipes/{id}/           |
+| Recipes      | User               | Delete my recipe                           | Remove recipes I no longer want to share       | DELETE /recipes/{id}/                              |
+| Recipes      | User               | Search for recipes                         | Find recipes based on ingredients, title, or cuisine type | GET /recipes/?search=<query>                       |
+| Likes        | User               | Like a recipe                              | Show my appreciation for a specific recipe     | POST /recipes/{id}/like/                           |
+| Likes        | User               | Unlike a recipe                            | Remove my like from a recipe                   | DELETE /recipes/{id}/unlike/                       |
+| Comments     | User               | Add a comment to a recipe                  | Share my thoughts on a recipe                  | POST /recipes/{id}/comments/                       |
+| Comments     | User               | Edit or delete my comment                  | Correct or remove comments I made on recipes   | PUT /comments/{id}/, DELETE /comments/{id}/        |
+| Profiles     | User               | View a user profile                        | See the recipes and activity of a specific user | GET /profiles/{id}/                                |
+| Followers    | User               | Follow another user                        | Keep track of their new recipes and updates    | POST /profiles/{id}/follow/                        |
+| Followers    | User               | Unfollow a user                            | Stop receiving updates on their new recipes    | DELETE /profiles/{id}/unfollow/                    |
+| Feeds        | User               | View recipes from users I follow           | Keep up with my favorite users' latest recipes | GET /recipes/?following=true                       |
+| Saved Recipes| User               | Save a recipe to my list                   | Keep track of recipes I want to try later      | POST /recipes/{id}/save/                           |
+| Saved Recipes| User               | Remove a saved recipe                      | Clean up my saved recipe list                  | DELETE /recipes/{id}/unsave/                       |
+
+
 
 ## Database Structure
 
@@ -95,42 +122,36 @@ Below is the ERD that outlines the relationships between the various models:
     python manage.py runserver
     ```
 
-## API Endpoints
+## Backend API Endpoints
 
-The backend provides several endpoints for the API. Here are a few examples:
+| Endpoint                           | Method          | Description                                                     |
+|------------------------------------|-----------------|-----------------------------------------------------------------|
+| **Admin and Authentication**                                                                                           |
+| `/admin/`                          | N/A             | Admin interface for the Django application                      |
+| `/api-auth/`                       | N/A             | DRF browsable API login                                          |
+| `/dj-rest-auth/`                   | N/A             | Endpoints for login, logout, password reset, etc.                |
+| `/dj-rest-auth/registration/`      | N/A             | User registration                                                |
+| **Recipe Endpoints**                                                                                                    |
+| `/recipes/`                        | `GET`, `POST`   | List all recipes or create a new recipe                          |
+| `/recipes/by_profile/`             | `GET`           | List recipes filtered by user profile                            |
+| `/recipes/(?P<pk>[^/.]+)/`         | `GET`, `PUT`, `DELETE` | Retrieve, update, or delete a specific recipe by ID             |
+| **Comment Endpoints**                                                                                                   |
+| `/comments/`                       | `GET`, `POST`   | List all comments or create a new comment                        |
+| `/comments/(?P<pk>[^/.]+)/`        | `GET`, `PUT`, `DELETE` | Retrieve, update, or delete a specific comment by ID            |
+| **Ranked Liked Recipes**                                                                                                |
+| `/ranked-liked-recipes/`           | `GET`           | List liked recipes by the user, ranked by the number of likes     |
+| **Likes Endpoints**                                                                                                     |
+| `/likes/`                          | `POST`          | Like a recipe                                                    |
+| `/likes/list/`                     | `GET`           | List all liked recipes by the user                               |
+| `/likes/<int:recipe_id>/`          | `DELETE`        | Unlike a recipe by recipe ID                                     |
+| **Profile Endpoints**                                                                                                   |
+| `/profiles/`                       | `GET`           | List all profiles                                                |
+| `/profiles/<int:pk>/`              | `GET`, `PUT`, `DELETE` | Retrieve, update, or delete a specific profile by ID            |
+| **Followers Endpoints**                                                                                                 |
+| `/followers/`                      | `GET`, `POST`   | List all followers or follow a user                              |
+| `/followers/<int:pk>/`             | `DELETE`        | Unfollow a user by ID                                            |
 
-### Admin and Authentication
-- **`admin/`**: Admin interface for the Django application.
-- **`api-auth/`**: DRF browsable API login.
-
-### Authentication (via dj-rest-auth)
-- **`dj-rest-auth/`**: Endpoints for login, logout, password reset, etc.
-- **`dj-rest-auth/registration/`**: User registration.
-
-### Recipe Endpoints
-- **`recipes/` [GET, POST]**: List all recipes or create a new recipe. `[name='recipe-list']`
-- **`recipes/by_profile/` [GET]**: List recipes filtered by user profile. `[name='recipe-by-profile']`
-- **`recipes/(?P<pk>[^/.]+)/` [GET, PUT, DELETE]**: Retrieve, update, or delete a specific recipe by ID. `[name='recipe-detail']`
-
-### Comment Endpoints
-- **`comments/` [GET, POST]**: List all comments or create a new comment. `[name='comment-list']`
-- **`comments/(?P<pk>[^/.]+)/` [GET, PUT, DELETE]**: Retrieve, update, or delete a specific comment by ID. `[name='comment-detail']`
-
-### Ranked Liked Recipes
-- **`ranked-liked-recipes/` [GET]**: List liked recipes by the user, ranked by the number of likes. `[name='ranked-liked-recipes']`
-
-### Likes Endpoints
-- **`likes/` [POST]**: Like a recipe. `[name='like-create']`
-- **`likes/list/` [GET]**: List all liked recipes by the user. `[name='like-list']`
-- **`likes/<int:recipe_id>/` [DELETE]**: Unlike a recipe by recipe ID. `[name='like-delete']`
-
-### Profile Endpoints
-- **`profiles/` [GET]**: List all profiles. `[name='profile-list']`
-- **`profiles/<int:pk>/` [GET, PUT, DELETE]**: Retrieve, update, or delete a specific profile by ID. `[name='profile-detail']`
-
-### Followers Endpoints
-- **`followers/` [GET, POST]**: List all followers or follow a user. `[name='follower-list']`
-- **`followers/<int:pk>/` [DELETE]**: Unfollow a user by ID. `[name='follower-detail']`
+---
 
 ## Testing
 
