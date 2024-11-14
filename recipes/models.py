@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.validators import MinValueValidator
 
 class Recipe(models.Model):
     """
@@ -16,7 +17,8 @@ class Recipe(models.Model):
     steps = models.TextField(help_text="Steps to make the recipe")
     cook_time = models.IntegerField(
         help_text="Cook time in minutes", 
-        default=30
+        default=30,
+        validators=[MinValueValidator(0)]
     )
     difficulty = models.CharField(
         max_length=50, 
