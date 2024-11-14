@@ -136,6 +136,7 @@ else:
     ]
 
 CORS_ALLOWED_ORIGINS = [
+    'https://3000-davidb3rgqv-project5foo-75up2jzyvte.ws.codeinstitute-ide.net',
     'https://foorky-fe-79ffc00345fc.herokuapp.com',
     'https://project5-api-a299de19cbb3.herokuapp.com'
 ]
