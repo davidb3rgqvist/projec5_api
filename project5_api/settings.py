@@ -42,7 +42,7 @@ REST_FRAMEWORK = {
 
 # CSRF trusted origins
 CSRF_TRUSTED_ORIGINS = [
-  "https://3000-davidb3rgqv-project5foo-2kek9vhh8tz.ws.codeinstitute-ide.net",
+  "https://3000-davidb3rgqv-project5foo-75up2jzyvte.ws.codeinstitute-ide.net",
   "https://8000-davidb3rgqv-project5api-dff603ub8x0.ws.codeinstitute-ide.net",
 ]
 
