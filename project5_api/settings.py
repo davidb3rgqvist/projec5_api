@@ -79,6 +79,7 @@ DEBUG = 'DEV' in os.environ
 ALLOWED_HOSTS = [
     '8000-davidb3rgqv-project5api-dff603ub8x0.ws.codeinstitute-ide.net',
     '127.0.0.1:8000',
+    '3000-davidb3rgqv-project5foo-75up2jzyvte.ws.codeinstitute-ide.net',
     'foorky-fe-79ffc00345fc.herokuapp.com',
     'project5-api-a299de19cbb3.herokuapp.com',
     'localhost'
