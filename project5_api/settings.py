@@ -135,6 +135,7 @@ if 'CLIENT_ORIGIN' in os.environ:
     ]
 else:
     CORS_ALLOWED_ORIGIN_REGEXES = [
+        r"^https://.*\.herokuapp\.com$",
         r"^https://.*\.gitpod\.io$",
         r"^https://.*\.codeinstitute\.net$",
     ]
