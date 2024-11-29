@@ -18,7 +18,6 @@ class Profile(models.Model):
     image = models.ImageField(
         upload_to='images/', default='../default_profile_sqbwns'
     )
-    # email = models.EmailField(max_length=255, unique=True)
     age = models.PositiveIntegerField(
         validators=[MinValueValidator(0), MaxValueValidator(120)],
         blank=True, null=True
